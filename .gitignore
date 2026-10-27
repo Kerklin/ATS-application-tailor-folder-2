@@ -1,0 +1,6 @@
+cv*
+*CV*
+*.pdf
+*.docx
+.env
+.DS_Store

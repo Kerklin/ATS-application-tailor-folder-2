@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ATS Application Tailor</title>
+<link rel="stylesheet" href="styles.css">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; worker-src 'self'; style-src 'self'; img-src 'self' data:; connect-src https://api.anthropic.com https://api.openai.com; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta name="referrer" content="no-referrer">
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>ATS Application Tailor</h1>
+    <p class="sub">Upload your CV, add the job description, get a fit check, HR prescreen, tailored CV, cover letter, salary range and file names.</p>
+  </header>
+
+  <section class="card">
+    <h2>1. Your CV</h2>
+    <label class="drop" id="cvDrop">
+      <input type="file" id="cvFile" accept=".pdf,.docx,.txt,.md">
+      <span id="cvLabel">Drop or choose a CV file (PDF, DOCX, TXT)</span>
+    </label>
+    <textarea id="cvText" rows="8" placeholder="...or paste your CV text here. Extracted text appears here so you can check it."></textarea>
+  </section>
+
+  <section class="card">
+    <h2>2. Job description</h2>
+    <input type="url" id="jdUrl" placeholder="Vacancy link (optional, read by the AI with web search)">
+    <label class="drop small">
+      <input type="file" id="jdFile" accept=".pdf,.docx,.txt,.md">
+      <span id="jdLabel">Or upload JD file</span>
+    </label>
+    <textarea id="jdText" rows="8" placeholder="...or paste the full JD text here (most reliable)."></textarea>
+    <p class="hint">Pasting the JD text is most reliable. A link alone works only with web search on, and many career portals can't be read that way.</p>
+  </section>
+
+  <section class="card">
+    <h2>3. Options</h2>
+    <div class="grid">
+      <label>Provider
+        <select id="provider">
+          <option value="anthropic">Anthropic (Claude)</option>
+          <option value="openai">OpenAI</option>
+        </select>
+      </label>
+      <label>Model
+        <input id="model" value="claude-sonnet-4-5">
+      </label>
+      <label>API key
+        <input id="apiKey" type="password" placeholder="sk-..." autocomplete="off" spellcheck="false">
+      </label>
+      <label>Output language
+        <select id="lang">
+          <option>English</option><option>Bosnian</option><option>French</option><option>Italian</option>
+        </select>
+      </label>
+      <label>Employer style
+        <select id="style">
+          <option value="un">UN / international organisation (formal, evidence-based)</option>
+          <option value="private">Private sector (commercial, executive)</option>
+          <option value="ngo">NGO / development</option>
+        </select>
+      </label>
+      <label>CV length
+        <select id="pages"><option value="2">Max 2 pages</option><option value="3">Max 3 pages</option><option value="0">No limit</option></select>
+      </label>
+    </div>
+    <div class="checks">
+      <label><input type="checkbox" id="web" checked> Web search (salary + JD link)</label>
+      <label><input type="checkbox" id="remember"> Remember API key on this device (not on shared computers)</label>
+    </div>
+    <textarea id="extra" rows="2" placeholder="Extra instructions (optional), e.g. 'Highlight PMP and EU IPA portfolio'"></textarea>
+  </section>
+
+  <button id="run" class="primary">Analyse and tailor</button>
+  <div id="status" class="status"></div>
+
+  <section id="results" class="card hidden">
+    <div class="tabs" id="tabs"></div>
+    <div class="panel">
+      <div class="panel-actions">
+        <button class="ghost" id="copyBtn">Copy</button>
+        <button class="ghost" id="dlTxt">Download .txt</button>
+        <button class="ghost" id="dlDoc">Download .doc</button>
+      </div>
+      <pre id="out"></pre>
+    </div>
+  </section>
+
+  <footer>
+    Runs entirely in your browser. Your CV and JD go only to the AI provider you choose, using your own key.
+    Always review the output before submitting. AI can still make mistakes.
+  </footer>
+</div>
+<script src="prompt.js"></script>
+<script type="module" src="app.js"></script>
+</body>
+</html>
